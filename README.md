@@ -32,8 +32,8 @@ const middleware = (app) => {
 const policy = {
   rules: [
     {
-      before: '*.*',
-      run: 'lookupAccountId'
+      apply: 'lookupAccountId'
+      on: '*.*',
     },
   ]
 }
@@ -43,7 +43,7 @@ module.exports = function(server) {
 }
 ```
 
-The `before` and `run` parameters both support arrays, so you can apply middleware conveniently to large portions of the app.
+The `on` and `apply` parameters both support arrays, so you can apply middleware conveniently to large portions of the app.
 
 ## Intercepting HTTP Options
 
