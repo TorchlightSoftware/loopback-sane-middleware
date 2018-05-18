@@ -1,0 +1,27 @@
+{
+  "name": "loopback-sane-middleware",
+  "version": "0.1.0",
+  "description": "Loopback middleware that gives you control.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TorchlightSoftware/loopback-sane-middleware.git"
+  },
+  "keywords": [
+    "loopback",
+    "sanity",
+    "middleware"
+  ],
+  "author": "q@bitmage.net",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TorchlightSoftware/loopback-sane-middleware/issues"
+  },
+  "homepage": "https://github.com/TorchlightSoftware/loopback-sane-middleware#readme",
+  "dependencies": {
+    "lodash": "^4.17.10"
+  }
+}
