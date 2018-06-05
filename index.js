@@ -33,19 +33,6 @@ module.exports = function applyMiddleware(app, getMiddleware, policy) {
     return _.every(matchup, matchOrStar)
   }
 
-  // We always use the *.* pattern so that we can control the ordering.
-  // Then we do our own filtering internally.
-  // Loopback has logic that changes the ordering of the middleware based on the specificity of
-  // your pattern, which is quite frustrating to work with, and is what we are trying to avoid.
-  //
-  // This is probably an inefficient implementation.  If anyone knows how to add items directly into
-  // the loopback middleware queue that would be helpful.
-  const applyRule = (on, except, mw) => {
-    app.remotes().before('*.*', (ctx, next) => {
-      match(pattern, ctx.methodString) ? mw(ctx, next) : next()
-    })
-  }
-
   // use the policy rules to apply the middleware to the app
   const rules = _.get(policy, 'rules', [])
   _.each(rules, (r) => {
@@ -67,6 +54,13 @@ module.exports = function applyMiddleware(app, getMiddleware, policy) {
       })
       .filter(a => a != null)
 
+    // We always use the *.* pattern so that we can control the ordering.
+    // Then we do our own filtering internally.
+    // Loopback has logic that changes the ordering of the middleware based on the specificity of
+    // your pattern, which is quite frustrating to work with, and is what we are trying to avoid.
+    //
+    // This is probably an inefficient implementation.  If anyone knows how to add items directly into
+    // the loopback middleware queue that would be helpful.
     app.remotes().before('*.*', (ctx, next) => {
 
       // check except rules
@@ -77,11 +71,15 @@ module.exports = function applyMiddleware(app, getMiddleware, policy) {
       }
 
       // check on rules
+      let found = false
       for (let o of on) {
-        if (!match(o, ctx.methodString)) {
-          return next()
+        if (match(o, ctx.methodString)) {
+          found = true
+          break
         }
       }
+
+      if (found === false) return next()
 
       // apply (maybe multiple) middleware steps
       return applyAll(apply, ctx, next)
