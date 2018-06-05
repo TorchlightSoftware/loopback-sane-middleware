@@ -63,23 +63,25 @@ module.exports = function applyMiddleware(app, getMiddleware, policy) {
     // the loopback middleware queue that would be helpful.
     app.remotes().before('*.*', (ctx, next) => {
 
-      // check except rules
+      // check 'except' rules
       for (let e of except) {
         if (match(e, ctx.methodString)) {
           return next()
         }
       }
 
-      // check on rules
-      let found = false
-      for (let o of on) {
-        if (match(o, ctx.methodString)) {
-          found = true
-          break
+      // check 'on' rules
+      if (on.length > 0) {
+        let found = false
+        for (let o of on) {
+          if (match(o, ctx.methodString)) {
+            found = true
+            break
+          }
         }
-      }
 
-      if (found === false) return next()
+        if (found === false) return next()
+      }
 
       // apply (maybe multiple) middleware steps
       return applyAll(apply, ctx, next)

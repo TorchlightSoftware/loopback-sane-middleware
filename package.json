@@ -1,6 +1,6 @@
 {
   "name": "loopback-sane-middleware",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Loopback middleware that gives you control.",
   "main": "index.js",
   "scripts": {
